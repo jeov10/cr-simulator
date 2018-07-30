@@ -29,7 +29,7 @@
       </div>
       <script>
         function solve() {
-          let amount = Number(document.getElementById("amount").value)
+          let amount = Number(document.getElementById("amount").value) //monto a invertir
           let array = []
           if (amount < 500 || amount > 250000) {
             $('#chart_div').html('')
@@ -37,22 +37,23 @@
             $('#test').html('')
           } else {
             const TIO = 13.5
-            let i = 6
+            let i = 6 //inicia con los primero seis meses
             let gananciaMensual = amount*(TIO/100)*(1/12)
             $('#gananciaM').html('<h4>Ganancia mensual promedio: $' + gananciaMensual.toLocaleString(undefined, {maximumFractionDigits: 2}) + ' </h4>')
             $('#test').html('<tr><th>Acumulado</th><th>Meses</th></tr>')
-            for(i; i <= 48; i++) {
+            for(i; i <= 36; i++) {
               var btn = $("<tr/>");
               var h1 = $('<td/>')
-              let gain = amount * (i/12) * (TIO/100)
+              let gain = amount * (i/12) * (TIO/100) //cálculo de la ganancia
               var h2 = $('<td/>')
-              amount = gain + amount
+              amount = gain + amount //acumulado y nuevo monto
               h1.html(amount.toLocaleString(undefined, {maximumFractionDigits: 2}))
               btn.append(h1)
               btn.append(h2)
               h2.html(i)
 
-              if(i%6 == 0) {
+
+              if(i%6 == 0) { //gráfica
                 array.push([i.toString(),amount])
               }
 
@@ -84,7 +85,7 @@
                 chart.draw(data, options);
               }
               //-----------------------------------
-              i+=5
+              i+=5 //incremento semestral
             }
           }
         }
