@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+
+    <div style="display:  flex; justify-content: space-around; width: 100%;">
+        <div class="input-info">
+            <div style="display:  flex; flex-direction:  row;">
+              <h4 style="width: 50%; margin: auto;">INGRESA CANTIDAD</h4>
+              <input type="number" id="amount" min="500" max="250000" required value="500" style="width: 50%;font-size: 24px;text-align: center;">
+            </div>
+            <p style="text-align: center; margin: 24px 0px 0px 0px;">Tasa anual promedio del 13.5%</p>
+            <p style="text-align: center; margin: 16px 0px 0px 0px;">Monto de inversión mínimo de $500.00 y máximo de $250,000.00</p>
+            <input type="button" name="" value="Simular" onclick="solve()" style="margin: 32px 0px 32px 0; width: 100%; font-size: 24px;text-align: center;">
+            <span id="gananciaM"></span>
+          </div>
+      </div>
+      <div style="display:  flex; flex-wrap:  wrap;">
+        <div class="cred-c-table--prestamo" style="padding-right: 32px;display:  flex;justify-content:  center;">
+            <h4 style="margin: 0px;"><table id='test' style="text-align: right; width: 215px;">
+            </table><h4>
+        </div>
+        <div style="display:  flex; flex-direction:  column;" class="cred-c-table--prestamo">
+          <div id="chart_div"></div>
+        </div>
+      </div>
+      <script>
+        function solve() {
+          let amount = Number(document.getElementById("amount").value)
+          let array = []
+          if (amount < 500 || amount > 250000) {
+            $('#chart_div').html('')
+            $('#gananciaM').html('')
+            $('#test').html('')
+          } else {
+            const TIO = 13.5
+            let i = 6
+            let gananciaMensual = amount*(TIO/100)*(1/12)
+            $('#gananciaM').html('<h4>Ganancia mensual promedio: $' + gananciaMensual.toLocaleString(undefined, {maximumFractionDigits: 2}) + ' </h4>')
+            $('#test').html('<tr><th>Acumulado</th><th>Meses</th></tr>')
+            for(i; i <= 48; i++) {
+              var btn = $("<tr/>");
+              var h1 = $('<td/>')
+              let gain = amount * (i/12) * (TIO/100)
+              var h2 = $('<td/>')
+              amount = gain + amount
+              h1.html(amount.toLocaleString(undefined, {maximumFractionDigits: 2}))
+              btn.append(h1)
+              btn.append(h2)
+              h2.html(i)
+
+              if(i%6 == 0) {
+                array.push([i.toString(),amount])
+              }
+
+              $('#test').append(btn);
+              //-----------------------------------
+              // Load the Visualization API and the corechart package.
+              google.charts.load('current', {'packages':['corechart']});
+
+              // Set a callback to run when the Google Visualization API is loaded.
+              google.charts.setOnLoadCallback(drawChart);
+
+              // Callback that creates and populates a data table,
+              // instantiates the pie chart, passes in the data and
+              // draws it.
+              function drawChart() {
+
+                // Create the data table.
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Meses');
+                data.addColumn('number',);
+
+                data.addRows(array);
+
+                // Set chart options
+                var options = {colors: ['#33cc66'], height: 500};
+
+                // Instantiate and draw our chart, passing in some options.
+                var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+              }
+              //-----------------------------------
+              i+=5
+            }
+          }
+        }
+      </script>
+      <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+      <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous">
+      </script>
+
+
+  </body>
+</html>
